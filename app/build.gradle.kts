@@ -43,7 +43,7 @@ android {
         compose = true
     }
     composeOptions {
-        kotlinCompilerExtensionVersion = "1.5.1"
+        kotlinCompilerExtensionVersion = "1.5.14"
     }
     packaging {
         resources {
@@ -53,6 +53,9 @@ android {
 }
 
 dependencies {
+
+    // WorkManager
+    implementation("androidx.work:work-runtime-ktx:2.8.0")
 
     //HILT
     implementation("com.google.dagger:hilt-android:2.51")
@@ -65,6 +68,10 @@ dependencies {
     implementation("com.squareup.retrofit2:converter-moshi:2.9.0")
     implementation("com.squareup.okhttp3:logging-interceptor:4.12.0")
 
+    //accompanist UI y navigation
+    implementation("androidx.navigation:navigation-compose:2.8.0-beta03")
+    implementation("com.google.accompanist:accompanist-swiperefresh:0.23.1")
+    implementation("com.google.accompanist:accompanist-navigation-material:0.23.1")
 
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.lifecycle.runtime.ktx)
