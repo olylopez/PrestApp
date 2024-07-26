@@ -43,10 +43,11 @@ object AppModule {
     fun providesPrestamoApi(moshi: Moshi): PrestAppApi {
 
         return Retrofit.Builder()
-            .baseUrl("https://ap2ticket.azurewebsites.net/")
+            .baseUrl("https://prestappservice.azurewebsites.net/")
             .addConverterFactory(MoshiConverterFactory.create(moshi))
             .build()
             .create(PrestAppApi::class.java)
     }
+
 
 }

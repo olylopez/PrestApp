@@ -11,6 +11,8 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.navigation.compose.rememberNavController
+import com.example.prestapp.screens.PrestAppNavHost
 import com.example.prestapp.ui.theme.PrestAppTheme
 
 class MainActivity : ComponentActivity() {
@@ -19,12 +21,8 @@ class MainActivity : ComponentActivity() {
         enableEdgeToEdge()
         setContent {
             PrestAppTheme {
-                Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
-                    Greeting(
-                        name = "Android",
-                        modifier = Modifier.padding(innerPadding)
-                    )
-                }
+                val navHostController = rememberNavController()
+                PrestAppNavHost(navHostController = navHostController)
             }
         }
     }

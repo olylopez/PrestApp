@@ -54,6 +54,18 @@ android {
 
 dependencies {
 
+    // Dependencias de Jetpack Compose adicionales
+    implementation ("androidx.compose.foundation:foundation:1.6.8")
+    implementation ("androidx.compose.material:material-icons-extended:1.6.8")
+    implementation ("androidx.compose.runtime:runtime-livedata:1.6.8")
+    implementation ("androidx.compose.runtime:runtime-rxjava2:1.6.8")
+
+// Dependencias para las serializaciones
+    implementation (libs.kotlinx.serialization.json.v132)
+
+// Dependencias de Coil para cargar imágenes
+    implementation (libs.coil.compose)
+
     // WorkManager
     implementation("androidx.work:work-runtime-ktx:2.8.0")
 
@@ -109,4 +121,9 @@ dependencies {
     debugImplementation(libs.androidx.ui.tooling)
     debugImplementation(libs.androidx.ui.test.manifest)
     implementation(libs.material.v150)
+
+    implementation(libs.material3)
+    implementation("androidx.compose.material3:material3-window-size-class:1.2.1")
+
+
 }
