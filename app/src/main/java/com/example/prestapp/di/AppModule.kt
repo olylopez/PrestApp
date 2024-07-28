@@ -1,6 +1,9 @@
 package com.example.prestapp.di
 
 import android.content.Context
+import androidx.room.Room
+import com.example.prestapp.data.local.dao.RutaDao
+import com.example.prestapp.data.local.database.PrestAppDb
 import com.example.prestapp.data.remote.PrestAppApi
 import com.squareup.moshi.Moshi
 import com.squareup.moshi.kotlin.reflect.KotlinJsonAdapterFactory
@@ -17,20 +20,6 @@ import javax.inject.Singleton
 @Module
 object AppModule {
 
-    /*@Provides
-    @Singleton
-    fun providesServicioDatabase(@ApplicationContext appContext: Context): ServicioDb =
-        Room.databaseBuilder(
-            appContext,
-            ServicioDb::class.java,
-            "Prestamo.db")
-            .fallbackToDestructiveMigration()
-            .build()
-
-    @Provides
-    @Singleton
-    fun providesServicioDao(db: ServicioDb) = db.servicioDao()*/
-
     @Provides
     @Singleton
     fun providesMoshi(): Moshi =
@@ -41,7 +30,6 @@ object AppModule {
     @Provides
     @Singleton
     fun providesPrestamoApi(moshi: Moshi): PrestAppApi {
-
         return Retrofit.Builder()
             .baseUrl("https://prestappservice.azurewebsites.net/")
             .addConverterFactory(MoshiConverterFactory.create(moshi))
@@ -49,5 +37,19 @@ object AppModule {
             .create(PrestAppApi::class.java)
     }
 
+    @Provides
+    @Singleton
+    fun provideDatabase(@ApplicationContext appContext: Context): PrestAppDb {
+        return Room.databaseBuilder(
+            appContext,
+            PrestAppDb::class.java,
+            "prestapp.db"
+        ).fallbackToDestructiveMigration().build()
+    }
 
+    @Provides
+    @Singleton
+    fun provideRutaDao(database: PrestAppDb): RutaDao {
+        return database.rutaDao()
+    }
 }

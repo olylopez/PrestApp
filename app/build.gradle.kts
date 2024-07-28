@@ -55,10 +55,13 @@ android {
 dependencies {
 
     // Dependencias de Jetpack Compose adicionales
-    implementation ("androidx.compose.foundation:foundation:1.6.8")
-    implementation ("androidx.compose.material:material-icons-extended:1.6.8")
-    implementation ("androidx.compose.runtime:runtime-livedata:1.6.8")
-    implementation ("androidx.compose.runtime:runtime-rxjava2:1.6.8")
+    implementation(libs.androidx.foundation)
+    implementation(libs.androidx.material.icons.extended)
+    implementation(libs.androidx.runtime.livedata)
+    implementation(libs.androidx.runtime.rxjava2)
+    //animation navhost
+    implementation(libs.androidx.compose.animation)
+    implementation(libs.androidx.navigation.compose)
 
 // Dependencias para las serializaciones
     implementation (libs.kotlinx.serialization.json.v132)
@@ -67,7 +70,7 @@ dependencies {
     implementation (libs.coil.compose)
 
     // WorkManager
-    implementation("androidx.work:work-runtime-ktx:2.8.0")
+    implementation(libs.androidx.work.runtime.ktx)
 
     //HILT
     implementation("com.google.dagger:hilt-android:2.51")
@@ -81,7 +84,6 @@ dependencies {
     implementation("com.squareup.okhttp3:logging-interceptor:4.12.0")
 
     //accompanist UI y navigation
-    implementation("androidx.navigation:navigation-compose:2.8.0-beta03")
     implementation("com.google.accompanist:accompanist-swiperefresh:0.23.1")
     implementation("com.google.accompanist:accompanist-navigation-material:0.23.1")
 

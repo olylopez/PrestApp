@@ -2,11 +2,12 @@ package com.example.prestapp.presentation
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.text.BasicText
 import androidx.compose.material3.*
-import androidx.compose.runtime.Composable
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -27,14 +28,15 @@ import com.example.prestapp.screens.Screen
 @Composable
 fun MainScreen(navController: NavHostController) {
     val primaryBackground = MaterialTheme.colorScheme.background
-    val primarySurface = MaterialTheme.colorScheme.surface
     val primaryTextColor = MaterialTheme.colorScheme.onBackground
     val buttonGreen = Color(0xFF4CAF50) // Verde para los botones
-    val lowerBackground = Color(0xFF81C784) // Fondo verde oscuro para la parte inferior
+    val lowerBackground = Color(0xFF388E3C) // Fondo verde oscuro para la parte inferior
 
     // Definir tipografías personalizadas
     val lobsterFont = FontFamily(Font(R.font.lobster_regular))
     val robotoFont = FontFamily(Font(R.font.roboto_regular))
+
+    var showDialog by remember { mutableStateOf(false) }
 
     Box(
         modifier = Modifier
@@ -66,7 +68,7 @@ fun MainScreen(navController: NavHostController) {
                     BasicText(text = "Rutas: 5", style = MaterialTheme.typography.bodyLarge.copy(color = primaryTextColor, fontFamily = robotoFont, fontWeight = FontWeight.Bold))
                 }
 
-                Spacer(modifier = Modifier.height(8.dp))
+                Spacer(modifier = Modifier.height(16.dp))
 
                 // Logo
                 Image(
@@ -77,130 +79,153 @@ fun MainScreen(navController: NavHostController) {
 
                 Spacer(modifier = Modifier.height(16.dp))
 
-                Text(text = "PREST APP", style = MaterialTheme.typography.headlineLarge.copy(color = primaryTextColor, fontSize = 32.sp, fontFamily = lobsterFont, fontWeight = FontWeight.Bold, textAlign = TextAlign.Center))
             }
 
+
+            Text(text = "PREST APP", style = MaterialTheme.typography.headlineLarge.copy(color = primaryTextColor, fontSize = 32.sp, fontFamily = lobsterFont, fontWeight = FontWeight.Bold, textAlign = TextAlign.Center))
+
+            Spacer(modifier = Modifier.height(16.dp))
+            Spacer(modifier = Modifier.height(8.dp))
             // Área inferior con fondo verde oscuro y botones
-            Box(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .background(lowerBackground, shape = RoundedCornerShape(topStart = 32.dp, topEnd = 32.dp))
-                    .padding(16.dp),
-                contentAlignment = Alignment.Center
+            Column(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalAlignment = Alignment.CenterHorizontally
             ) {
-                Column(
+
+                Row(
                     modifier = Modifier.fillMaxWidth(),
-                    horizontalAlignment = Alignment.CenterHorizontally
+                    horizontalArrangement = Arrangement.SpaceEvenly
                 ) {
-                    // Botones para las funcionalidades
-                    Button(
-                        onClick = { navController.navigate(Screen.ClientesList) },
-                        colors = ButtonDefaults.buttonColors(containerColor = buttonGreen), // Color verde para los botones
+                    // Botón Realizar Cobro
+                    Box(
                         modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(horizontal = 32.dp)
+                            .size(80.dp)
+                            .background(color = buttonGreen, shape = CircleShape)
+                            .clickable { navController.navigate(Screen.ClientesList) },
+                        contentAlignment = Alignment.Center
                     ) {
-                        Row(verticalAlignment = Alignment.CenterVertically) {
+                        Column(
+                            horizontalAlignment = Alignment.CenterHorizontally
+                        ) {
                             Image(
                                 painter = painterResource(R.drawable.cobro),
                                 contentDescription = "Realizar Cobro",
-                                modifier = Modifier.size(24.dp),
+                                modifier = Modifier.size(40.dp),
                                 colorFilter = ColorFilter.tint(Color.White)
                             )
-                            Spacer(modifier = Modifier.width(8.dp))
-                            Text(text = "REALIZAR COBRO", color = Color.White)
+                            Spacer(modifier = Modifier.height(4.dp))
+                            Text(text = "COBRO", color = Color.White, textAlign = TextAlign.Center, fontSize = 10.sp)
                         }
                     }
 
-                    Spacer(modifier = Modifier.height(16.dp))
-
-                    Button(
-                        onClick = { navController.navigate(Screen.PrestamoForm) },
-                        colors = ButtonDefaults.buttonColors(containerColor = buttonGreen), // Color verde para los botones
+                    // Botón Realizar Préstamo
+                    Box(
                         modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(horizontal = 32.dp)
+                            .size(80.dp)
+                            .background(color = buttonGreen, shape = CircleShape)
+                            .clickable { navController.navigate(Screen.PrestamoForm) },
+                        contentAlignment = Alignment.Center
                     ) {
-                        Row(verticalAlignment = Alignment.CenterVertically) {
+                        Column(
+                            horizontalAlignment = Alignment.CenterHorizontally
+                        ) {
                             Image(
                                 painter = painterResource(R.drawable.prestamo),
-                                contentDescription = "Realizar Prestamo",
-                                modifier = Modifier.size(24.dp),
+                                contentDescription = "Realizar Préstamo",
+                                modifier = Modifier.size(40.dp),
                                 colorFilter = ColorFilter.tint(Color.White)
                             )
-                            Spacer(modifier = Modifier.width(8.dp))
-                            Text(text = "REALIZAR PRÉSTAMO", color = Color.White)
-                        }
-                    }
-
-                    Spacer(modifier = Modifier.height(16.dp))
-
-                    Button(
-                        onClick = { navController.navigate(Screen.HistorialCobros) },
-                        colors = ButtonDefaults.buttonColors(containerColor = buttonGreen), // Color verde para los botones
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(horizontal = 32.dp)
-                    ) {
-                        Row(verticalAlignment = Alignment.CenterVertically) {
-                            Image(
-                                painter = painterResource(R.drawable.cuadre),
-                                contentDescription = "Cuadre General",
-                                modifier = Modifier.size(24.dp),
-                                colorFilter = ColorFilter.tint(Color.White)
-                            )
-                            Spacer(modifier = Modifier.width(8.dp))
-                            Text(text = "VER HISTORIAL", color = Color.White)
-                        }
-                    }
-
-                    Spacer(modifier = Modifier.height(16.dp))
-
-                    Button(
-                        onClick = { navController.navigate(Screen.ClientesList) },
-                        colors = ButtonDefaults.buttonColors(containerColor = buttonGreen), // Color verde para los botones
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(horizontal = 32.dp)
-                    ) {
-                        Row(verticalAlignment = Alignment.CenterVertically) {
-                            Image(
-                                painter = painterResource(R.drawable.person),
-                                contentDescription = "Clientes",
-                                modifier = Modifier.size(24.dp),
-                                colorFilter = ColorFilter.tint(Color.White)
-                            )
-                            Spacer(modifier = Modifier.width(8.dp))
-                            Text(text = "CLIENTES", color = Color.White)
+                            Spacer(modifier = Modifier.height(4.dp))
+                            Text(text = "PRÉSTAMO", color = Color.White, textAlign = TextAlign.Center, fontSize = 10.sp)
                         }
                     }
                 }
-            }
 
-            // Box para configuración
-            Box(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .background(lowerBackground, shape = RoundedCornerShape(32.dp))
-                    .padding(16.dp),
-                contentAlignment = Alignment.Center
-            ) {
-                Column(
+                Spacer(modifier = Modifier.height(16.dp))
+                Spacer(modifier = Modifier.height(16.dp))
+
+                Row(
                     modifier = Modifier.fillMaxWidth(),
-                    horizontalAlignment = Alignment.CenterHorizontally
+                    horizontalArrangement = Arrangement.SpaceEvenly
+                ) {
+                    // Botón Ver Historial
+                    Box(
+                        modifier = Modifier
+                            .size(80.dp)
+                            .background(color = buttonGreen, shape = CircleShape)
+                            .clickable { navController.navigate(Screen.HistorialCobros) },
+                        contentAlignment = Alignment.Center
+                    ) {
+                        Column(
+                            horizontalAlignment = Alignment.CenterHorizontally
+                        ) {
+                            Image(
+                                painter = painterResource(R.drawable.cuadre),
+                                contentDescription = "Cuadre General",
+                                modifier = Modifier.size(40.dp),
+                                colorFilter = ColorFilter.tint(Color.White)
+                            )
+                            Spacer(modifier = Modifier.height(4.dp))
+                            Text(text = "HISTORIAL", color = Color.White, textAlign = TextAlign.Center, fontSize = 10.sp)
+                        }
+                    }
+
+                    // Botón Clientes
+                    Box(
+                        modifier = Modifier
+                            .size(80.dp)
+                            .background(color = buttonGreen, shape = CircleShape)
+                            .clickable { navController.navigate(Screen.ClientesList) },
+                        contentAlignment = Alignment.Center
+                    ) {
+                        Column(
+                            horizontalAlignment = Alignment.CenterHorizontally
+                        ) {
+                            Image(
+                                painter = painterResource(R.drawable.person),
+                                contentDescription = "Clientes",
+                                modifier = Modifier.size(40.dp),
+                                colorFilter = ColorFilter.tint(Color.White)
+                            )
+                            Spacer(modifier = Modifier.height(4.dp))
+                            Text(text = "CLIENTES", color = Color.White, textAlign = TextAlign.Center, fontSize = 10.sp)
+                        }
+                    }
+                }
+
+                Spacer(modifier = Modifier.height(32.dp))
+
+                // Botón de configuración
+                Box(
+                    modifier = Modifier
+                        .size(80.dp)
+                        .background(color = buttonGreen, shape = CircleShape)
+                        .clickable { showDialog = true },
+                    contentAlignment = Alignment.Center
                 ) {
                     Icon(
                         imageVector = Icons.Filled.Settings,
                         contentDescription = "Configuración",
-                        modifier = Modifier.size(40.dp),
-                        tint = Color.White
-                    )
-                    Spacer(modifier = Modifier.height(8.dp))
-                    Text(
-                        text = "CONFIGURACIÓN",
-                        style = MaterialTheme.typography.bodyLarge.copy(color = Color.White)
+                        tint = Color.White,
+                        modifier = Modifier.size(48.dp)
                     )
                 }
+                Spacer(modifier = Modifier.height(8.dp))
+                Text(
+                    text = "Configuración",
+                    color = primaryTextColor,
+                    fontFamily = robotoFont,
+                    fontWeight = FontWeight.Bold
+                )
+            }
+
+
+            if (showDialog) {
+                ConfiguracionDialog(
+                    onDismissRequest = { showDialog = false },
+                    onUsersClick = { navController.navigate(Screen.UsuariosList.toString()); showDialog = false },
+                    onRutasClick = { navController.navigate(Screen.RutaScreen.toString()); showDialog = false }
+                )
             }
         }
     }

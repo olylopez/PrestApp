@@ -1,5 +1,6 @@
 package com.example.prestapp.screens
 import kotlinx.serialization.Serializable
+
 sealed class Screen {
 
     // Pantalla principal
@@ -29,4 +30,8 @@ sealed class Screen {
     // Pantalla para registrar y listar usuarios
     @Serializable
     object UsuariosList : Screen()
+
+    // Nueva pantalla de configuración
+    @Serializable
+    object RutaScreen : Screen()
 }

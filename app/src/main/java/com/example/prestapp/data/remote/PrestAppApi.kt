@@ -76,4 +76,20 @@ interface PrestAppApi {
 
     @POST("api/Users/login")
     suspend fun loginUser(@Body login: LoginDto): AuthResponseDto
+
+    // Ruta Endpoints
+    @GET("api/Rutas")
+    suspend fun getRutas(): List<RutaDto>
+
+    @GET("api/Rutas/{id}")
+    suspend fun getRuta(@Path("id") id: Int): RutaDto
+
+    @POST("api/Rutas")
+    suspend fun postRuta(@Body ruta: RutaDto): RutaDto
+
+    @PUT("api/Rutas/{id}")
+    suspend fun putRuta(@Path("id") id: Int, @Body ruta: RutaDto): RutaDto
+
+    @DELETE("api/Rutas/{id}")
+    suspend fun deleteRuta(@Path("id") id: Int): Response<Unit>
 }
