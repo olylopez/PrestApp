@@ -224,7 +224,7 @@ fun MainScreen(navController: NavHostController) {
                 ConfiguracionDialog(
                     onDismissRequest = { showDialog = false },
                     onUsersClick = { navController.navigate(Screen.UsuariosList.toString()); showDialog = false },
-                    onRutasClick = { navController.navigate(Screen.RutaScreen.toString()); showDialog = false }
+                    onRutasClick = { navController.navigate(Screen.RutaListScreen.toString()); showDialog = false }
                 )
             }
         }

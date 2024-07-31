@@ -1,14 +1,13 @@
-package com.example.prestapp.presentation.Components
+package com.example.prestapp.presentation.componentes
 
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.automirrored.filled.List
 import androidx.compose.material.icons.filled.AccountCircle
-import androidx.compose.material.icons.filled.History
 import androidx.compose.material.icons.filled.Info
-import androidx.compose.material.icons.filled.PersonAdd
+import androidx.compose.material.icons.outlined.AccountCircle
+import androidx.compose.material.icons.outlined.Info
 import androidx.compose.material3.DrawerState
 import androidx.compose.material3.Icon
 import androidx.compose.material3.ModalDrawerSheet
@@ -34,6 +33,7 @@ data class NavigationItem(
     var badgeCount: Double? = null
 )
 
+
 @Composable
 fun NavigationDrawer(
     navController: NavHostController,
@@ -43,29 +43,14 @@ fun NavigationDrawer(
     val scope = rememberCoroutineScope()
     val items = listOf(
         NavigationItem(
-            title = "Lista Clientes",
+            title = "Tecnicos",
             selectedIcon = Icons.Filled.AccountCircle,
-            unselectedIcon = Icons.Default.AccountCircle
+            unselectedIcon = Icons.Outlined.AccountCircle
         ),
         NavigationItem(
-            title = "Registro de Clientes",
+            title = "Tipo Técnico",
             selectedIcon = Icons.Filled.Info,
-            unselectedIcon = Icons.Default.Info
-        ),
-        NavigationItem(
-            title = "Lista Préstamos",
-            selectedIcon = Icons.AutoMirrored.Filled.List,
-            unselectedIcon = Icons.AutoMirrored.Filled.List
-        ),
-        NavigationItem(
-            title = "Historial de Cobros",
-            selectedIcon = Icons.Filled.History,
-            unselectedIcon = Icons.Default.History
-        ),
-        NavigationItem(
-            title = "Usuarios",
-            selectedIcon = Icons.Filled.PersonAdd,
-            unselectedIcon = Icons.Default.PersonAdd
+            unselectedIcon = Icons.Outlined.Info
         )
     )
     val selectedItem = remember { mutableStateOf(items[0]) }
@@ -91,11 +76,8 @@ fun NavigationDrawer(
                             selectedItem.value = item
                             scope.launch { drawerState.close() }
                             when (item.title) {
-                                "Lista Clientes" -> navController.navigate(Screen.ClientesList)
-                                "Registro de Clientes" -> navController.navigate(Screen.ClienteForm)
-                                "Lista Préstamos" -> navController.navigate(Screen.PrestamosPorRuta)
-                                "Historial de Cobros" -> navController.navigate(Screen.HistorialCobros)
-                                "Usuarios" -> navController.navigate(Screen.UsuariosList)
+                                "Tecnicos" -> navController.navigate(Screen.RutaListScreen)
+                                "Tipo Técnico" -> navController.navigate(Screen.RutaListScreen)
                             }
                         },
                         modifier = Modifier.padding(NavigationDrawerItemDefaults.ItemPadding)
@@ -104,7 +86,7 @@ fun NavigationDrawer(
             }
         },
         drawerState = drawerState
-    ) {
+    ){
         content()
     }
 }

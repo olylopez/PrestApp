@@ -2,7 +2,7 @@ package com.example.prestapp.data.remote.dtos
 
 import com.example.prestapp.data.local.entities.RutaEntity
 
-class RutaDto(
+data class RutaDto(
     val rutaID: Int,
     val nombre: String,
     val descripcion: String?

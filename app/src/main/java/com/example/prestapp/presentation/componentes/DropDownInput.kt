@@ -1,4 +1,4 @@
-package com.example.prestapp.presentation.Components
+package com.example.prestapp.presentation.componentes
 
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column

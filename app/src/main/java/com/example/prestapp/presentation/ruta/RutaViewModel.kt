@@ -13,37 +13,27 @@ import javax.inject.Inject
 
 @HiltViewModel
 class RutaViewModel @Inject constructor(
-    private val repository: RutaRepository,
+    private val repository: RutaRepository
 ) : ViewModel() {
     var uiState = MutableStateFlow(RutaUIState())
         private set
 
-    val rutas: StateFlow<List<RutaEntity>> = repository.getRutas()
-        .map { result ->
-            when (result) {
-                is Resource.Success -> result.data ?: emptyList()
-                is Resource.Error -> emptyList()
-                is Resource.Loading -> emptyList()
-                else -> emptyList() // Manejo del else
-            }
-        }
-        .stateIn(
-            scope = viewModelScope,
-            started = SharingStarted.WhileSubscribed(5_000),
-            initialValue = emptyList()
-        )
-
-    fun getRutaById(rutaId: Int) {
+    init {
         viewModelScope.launch {
-            repository.getRutaById(rutaId).collect { ruta ->
-                ruta?.let {
-                    uiState.update { state ->
-                        state.copy(
-                            rutaID = it.rutaID,
-                            nombre = it.nombre,
-                            descripcion = it.descripcion ?: "" // Maneja el valor nulo
-                        )
-                    }
+            getRutas()
+        }
+    }
+
+    fun onSetRuta(rutaId: Int) {
+        viewModelScope.launch {
+            val ruta = repository.getRutaById(rutaId).firstOrNull()
+            ruta?.let {
+                uiState.update {
+                    it.copy(
+                        rutaID = ruta.rutaID,
+                        nombre = ruta.nombre,
+                        descripcion = ruta.descripcion ?: ""
+                    )
                 }
             }
         }
@@ -63,46 +53,64 @@ class RutaViewModel @Inject constructor(
 
     fun saveRuta() {
         viewModelScope.launch {
-            val rutaDto = RutaDto(
-                rutaID = uiState.value.rutaID ?: 0,
-                nombre = uiState.value.nombre,
-                descripcion = uiState.value.descripcion
-            )
-            repository.addRuta(rutaDto)
+            try {
+                val rutaDto = uiState.value.toDTO()
+                if (uiState.value.rutaID == null || uiState.value.rutaID == 0) {
+                    repository.addRuta(rutaDto)
+                } else {
+                    repository.updateRuta(rutaDto)
+                }
+                uiState.value = RutaUIState()
+            } catch (e: Exception) {
+                uiState.update {
+                    it.copy(errorMessage = "Error saving/updating route: ${e.localizedMessage}")
+                }
+            }
         }
     }
 
-    fun updateRuta() {
-        viewModelScope.launch {
-            val rutaDto = RutaDto(
-                rutaID = uiState.value.rutaID ?: 0,
-                nombre = uiState.value.nombre,
-                descripcion = uiState.value.descripcion
-            )
-            repository.updateRuta(rutaDto)
-        }
+    fun newRuta() {
+        uiState.value = RutaUIState()
     }
 
     fun deleteRuta(rutaId: Int) {
         viewModelScope.launch {
-            repository.deleteRuta(rutaId)
+            try {
+                repository.deleteRuta(rutaId)
+                getRutas()
+            } catch (e: Exception) {
+                uiState.update {
+                    it.copy(errorMessage = "Error deleting route: ${e.localizedMessage}")
+                }
+            }
         }
     }
 
     fun validation(): Boolean {
-        uiState.value.nombreError = uiState.value.nombre.isEmpty()
-        uiState.value.descripcionError = uiState.value.descripcion.isEmpty()
+        val isValid = uiState.value.nombre.isNotEmpty() && uiState.value.descripcion.isNotEmpty()
         uiState.update {
             it.copy(
-                saveSuccess = !uiState.value.nombreError && !uiState.value.descripcionError
+                nombreError = uiState.value.nombre.isEmpty(),
+                descripcionError = uiState.value.descripcion.isEmpty(),
+                saveSuccess = isValid
             )
         }
-        return uiState.value.saveSuccess
+        return isValid
     }
 
-    fun newRuta() {
+    private fun getRutas() {
         viewModelScope.launch {
-            uiState.value = RutaUIState()
+            repository.getRutas().collect { result ->
+                when (result) {
+                    is Resource.Loading -> uiState.update { it.copy(isLoading = true) }
+                    is Resource.Success -> uiState.update {
+                        it.copy(isLoading = false, rutas = result.data ?: emptyList())
+                    }
+                    is Resource.Error -> uiState.update {
+                        it.copy(isLoading = false, errorMessage = result.message)
+                    }
+                }
+            }
         }
     }
 }
@@ -119,7 +127,7 @@ data class RutaUIState(
     val errorMessage: String? = null
 )
 
-fun RutaUIState.toEntity() = RutaEntity(
+fun RutaUIState.toDTO() = RutaDto(
     rutaID = rutaID ?: 0,
     nombre = nombre,
     descripcion = descripcion

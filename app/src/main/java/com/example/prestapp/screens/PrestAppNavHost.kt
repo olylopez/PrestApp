@@ -6,10 +6,15 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.compose.animation.*
 import androidx.compose.animation.core.tween
+import androidx.navigation.NavType
+import androidx.navigation.navArgument
+import androidx.navigation.toRoute
 import com.example.prestapp.presentation.MainScreen
+import com.example.prestapp.presentation.ruta.RutaListScreen
 import com.example.prestapp.presentation.ruta.RutaScreen
+import com.example.prestapp.presentation.ruta.RutasScreen
 
-@OptIn(ExperimentalAnimationApi::class)
+
 @Composable
 fun PrestAppNavHost(navHostController: NavHostController) {
     NavHost(
@@ -27,9 +32,8 @@ fun PrestAppNavHost(navHostController: NavHostController) {
         ) {
             MainScreen(navController = navHostController)
         }
-
         composable(
-            route = Screen.ClientesList.toString(),
+            route = Screen.RutaListScreen.toString(),
             enterTransition = {
                 fadeIn(animationSpec = tween(700)) + slideInHorizontally(initialOffsetX = { it })
             },
@@ -37,55 +41,24 @@ fun PrestAppNavHost(navHostController: NavHostController) {
                 fadeOut(animationSpec = tween(700)) + slideOutHorizontally(targetOffsetX = { -it })
             }
         ) {
-            // Aquí debes llamar a tu pantalla de clientes
+            RutasScreen(navController = navHostController)
         }
 
         composable(
-            route = Screen.PrestamoForm.toString(),
+            route = "${Screen.RutaScreen}/{rutaId}",
+            arguments = listOf(navArgument("rutaId") { type = NavType.IntType }),
             enterTransition = {
                 fadeIn(animationSpec = tween(700)) + slideInHorizontally(initialOffsetX = { it })
             },
             exitTransition = {
                 fadeOut(animationSpec = tween(700)) + slideOutHorizontally(targetOffsetX = { -it })
             }
-        ) {
-            // Aquí debes llamar a tu pantalla de formulario de préstamo
-        }
-
-        composable(
-            route = Screen.HistorialCobros.toString(),
-            enterTransition = {
-                fadeIn(animationSpec = tween(700)) + slideInHorizontally(initialOffsetX = { it })
-            },
-            exitTransition = {
-                fadeOut(animationSpec = tween(700)) + slideOutHorizontally(targetOffsetX = { -it })
-            }
-        ) {
-            // Aquí debes llamar a tu pantalla de historial de cobros
-        }
-
-        composable(
-            route = Screen.UsuariosList.toString(),
-            enterTransition = {
-                fadeIn(animationSpec = tween(700)) + slideInHorizontally(initialOffsetX = { it })
-            },
-            exitTransition = {
-                fadeOut(animationSpec = tween(700)) + slideOutHorizontally(targetOffsetX = { -it })
-            }
-        ) {
-            // Aquí debes llamar a tu pantalla de lista de usuarios
-        }
-
-        composable(
-            route = Screen.RutaScreen.toString(),
-            enterTransition = {
-                fadeIn(animationSpec = tween(700)) + slideInHorizontally(initialOffsetX = { it })
-            },
-            exitTransition = {
-                fadeOut(animationSpec = tween(700)) + slideOutHorizontally(targetOffsetX = { -it })
-            }
-        ) {
-            RutaScreen(navController = navHostController)
+        ) { backStackEntry ->
+            val rutaId = backStackEntry.arguments?.getInt("rutaId") ?: 0
+            RutaScreen(
+                navController = navHostController,
+                rutaId = rutaId
+            )
         }
     }
 }

@@ -1,4 +1,4 @@
-package com.example.prestapp.presentation.Components
+package com.example.prestapp.presentation.componentes
 
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add

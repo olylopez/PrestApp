@@ -54,24 +54,6 @@ android {
 
 dependencies {
 
-    // Dependencias de Jetpack Compose adicionales
-    implementation(libs.androidx.foundation)
-    implementation(libs.androidx.material.icons.extended)
-    implementation(libs.androidx.runtime.livedata)
-    implementation(libs.androidx.runtime.rxjava2)
-    //animation navhost
-    implementation(libs.androidx.compose.animation)
-    implementation(libs.androidx.navigation.compose)
-
-// Dependencias para las serializaciones
-    implementation (libs.kotlinx.serialization.json.v132)
-
-// Dependencias de Coil para cargar imágenes
-    implementation (libs.coil.compose)
-
-    // WorkManager
-    implementation(libs.androidx.work.runtime.ktx)
-
     //HILT
     implementation("com.google.dagger:hilt-android:2.51")
     ksp("com.google.dagger:hilt-android-compiler:2.51")
@@ -87,12 +69,13 @@ dependencies {
     implementation("com.google.accompanist:accompanist-swiperefresh:0.23.1")
     implementation("com.google.accompanist:accompanist-navigation-material:0.23.1")
 
+
+    //
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.lifecycle.runtime.ktx)
     implementation(libs.androidx.lifecycle.runtime.compose)
     implementation(libs.androidx.lifecycle.viewmodel.compose)
     implementation(libs.androidx.activity.compose)
-
 
     implementation(platform(libs.androidx.compose.bom))
     implementation(libs.androidx.ui)
@@ -100,12 +83,31 @@ dependencies {
     implementation(libs.androidx.ui.tooling.preview)
     implementation(libs.androidx.material3)
 
-    //navigation
+    //animation NAVIGATION
+    implementation(libs.androidx.compose.animation)
     implementation(libs.androidx.navigation.compose)
-    implementation(libs.kotlinx.serialization.json)
+
+// Dependencias para las serializaciones
+    implementation (libs.kotlinx.serialization.json)
+
+
+    // Dependencias de Jetpack Compose adicionales
+    implementation(libs.androidx.foundation)
+    implementation(libs.androidx.material.icons.extended)
+    implementation(libs.androidx.runtime.livedata)
+    implementation(libs.androidx.runtime.rxjava2)
+
+
+// Dependencias de Coil para cargar imágenes
+    implementation (libs.coil.compose)
+
+    // WorkManager
+    implementation(libs.androidx.work.runtime.ktx)
+
 
     //Room
     implementation(libs.androidx.room.runtime)
+    implementation(libs.material)
     annotationProcessor(libs.androidx.room.compiler)
     ksp(libs.androidx.room.compiler)
 
@@ -122,10 +124,8 @@ dependencies {
     androidTestImplementation(libs.androidx.ui.test.junit4)
     debugImplementation(libs.androidx.ui.tooling)
     debugImplementation(libs.androidx.ui.test.manifest)
-    implementation(libs.material.v150)
+
 
     implementation(libs.material3)
-    implementation("androidx.compose.material3:material3-window-size-class:1.2.1")
-
 
 }

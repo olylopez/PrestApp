@@ -7,10 +7,10 @@ import com.example.prestapp.data.remote.dtos.RutaDto
 import com.example.prestapp.data.remote.dtos.toEntity
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.first
-import kotlinx.coroutines.flow.firstOrNull
 import kotlinx.coroutines.flow.flow
 import javax.inject.Inject
 import javax.inject.Singleton
+
 
 @Singleton
 class RutaRepository @Inject constructor(
@@ -22,9 +22,15 @@ class RutaRepository @Inject constructor(
         try {
             val localRutas = rutaDao.getRutas().first()
             emit(Resource.Success(localRutas))
-            val remoteRutas = prestAppApi.getRutas()
-            rutaDao.deleteAllRutas()
-            rutaDao.insertRutas(remoteRutas.map { it.toEntity() })
+            try {
+                val remoteRutas = prestAppApi.getRutas()
+                rutaDao.deleteAllRutas()
+                rutaDao.insertRutas(remoteRutas.map { it.toEntity() })
+                val updatedRutas = rutaDao.getRutas().first()
+                emit(Resource.Success(updatedRutas))
+            } catch (e: Exception) {
+                emit(Resource.Error("Error fetching from remote, showing local data", localRutas))
+            }
         } catch (e: Exception) {
             emit(Resource.Error(e.localizedMessage ?: "An unexpected error occurred"))
         }
@@ -33,7 +39,6 @@ class RutaRepository @Inject constructor(
     fun getRutaById(rutaId: Int): Flow<RutaEntity> {
         return rutaDao.getRutaById(rutaId)
     }
-
 
     suspend fun addRuta(rutaDto: RutaDto) {
         val remoteRuta = prestAppApi.postRuta(rutaDto)
@@ -50,6 +55,7 @@ class RutaRepository @Inject constructor(
         rutaDao.deleteRutaById(rutaId)
     }
 }
+
 
 sealed class Resource<T>(val data: T? = null, val message: String? = null) {
     class Loading<T>(data: T? = null) : Resource<T>(data)

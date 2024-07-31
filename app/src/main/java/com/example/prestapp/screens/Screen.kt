@@ -31,7 +31,10 @@ sealed class Screen {
     @Serializable
     object UsuariosList : Screen()
 
-    // Nueva pantalla de configuración
+
     @Serializable
-    object RutaScreen : Screen()
+    object RutaListScreen : Screen()
+
+    @Serializable
+    data class RutaScreen(val rutaId: Int) : Screen()
 }

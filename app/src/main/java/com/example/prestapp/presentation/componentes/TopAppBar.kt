@@ -1,7 +1,9 @@
-package com.example.prestapp.presentation.Components
+package com.example.prestapp.presentation.componentes
 
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.KeyboardArrowLeft
+import androidx.compose.material.icons.filled.Home
+import androidx.compose.material.icons.filled.KeyboardArrowLeft
 import androidx.compose.material.icons.filled.Menu
 import androidx.compose.material3.CenterAlignedTopAppBar
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -38,7 +40,7 @@ fun TopAppBar(title: String, onMenuClick: () -> Unit) {
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun TopAppBarVolver(title: String, onVolver: () -> Unit) {
+fun TopAppBarVolver(title: String, onHome: () -> Unit) {
     CenterAlignedTopAppBar(
         title = {
             Text(
@@ -48,12 +50,15 @@ fun TopAppBarVolver(title: String, onVolver: () -> Unit) {
             )
         },
         navigationIcon = {
-            IconButton(onClick = onVolver) {
+            IconButton(onClick = onHome) {
                 Icon(
-                    imageVector = Icons.AutoMirrored.Filled.KeyboardArrowLeft,
-                    contentDescription = "Localized description"
+                    imageVector = Icons.Default.Home,
+                    contentDescription = "Home"
                 )
             }
         }
     )
 }
+
+
+

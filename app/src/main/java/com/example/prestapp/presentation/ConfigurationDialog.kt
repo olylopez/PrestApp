@@ -2,14 +2,11 @@ package com.example.prestapp.presentation
 
 import androidx.compose.foundation.layout.*
 import androidx.compose.material3.*
-import androidx.compose.runtime.Composable
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.unit.dp
 
 @Composable
 fun ConfiguracionDialog(
@@ -20,33 +17,23 @@ fun ConfiguracionDialog(
     AlertDialog(
         onDismissRequest = onDismissRequest,
         title = {
-            Text(
-                text = "Configuración",
-                fontWeight = FontWeight.Bold,
-                fontSize = 20.sp,
-                modifier = Modifier.fillMaxWidth(),
-                textAlign = TextAlign.Center
-            )
+            Text(text = "Configuración")
         },
         text = {
             Column(
-                modifier = Modifier.fillMaxWidth(),
-                horizontalAlignment = Alignment.CenterHorizontally,
-                verticalArrangement = Arrangement.Center
+                horizontalAlignment = Alignment.CenterHorizontally
             ) {
                 Button(
                     onClick = onUsersClick,
-                    colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF4CAF50)),
-                    modifier = Modifier
+                    colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF4CAF50)),                   modifier = Modifier
                         .fillMaxWidth()
                         .padding(vertical = 8.dp)
                 ) {
-                    Text(text = "Users", color = Color.White)
+                    Text(text = "Usuarios", color = Color.White)
                 }
-
                 Button(
                     onClick = onRutasClick,
-                    colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF4CAF50)),
+                    colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF4CAF50)), // Color verde
                     modifier = Modifier
                         .fillMaxWidth()
                         .padding(vertical = 8.dp)
@@ -56,15 +43,11 @@ fun ConfiguracionDialog(
             }
         },
         confirmButton = {
-            Box(
-                modifier = Modifier.fillMaxWidth(),
-                contentAlignment = Alignment.Center
+            OutlinedButton(
+                onClick = onDismissRequest,
+                modifier = Modifier.fillMaxWidth()
             ) {
-                OutlinedButton(
-                    onClick = onDismissRequest
-                ) {
-                    Text(text = "Cerrar")
-                }
+                Text(text = "Cerrar")
             }
         }
     )
