@@ -2,6 +2,7 @@ package com.example.prestapp.di
 
 import android.content.Context
 import androidx.room.Room
+import com.example.prestapp.ConnectivityReceiver
 import com.example.prestapp.data.local.dao.RutaDao
 import com.example.prestapp.data.local.database.PrestAppDb
 import com.example.prestapp.data.remote.PrestAppApi
@@ -12,12 +13,15 @@ import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
+import okhttp3.OkHttpClient
 import retrofit2.Retrofit
 import retrofit2.converter.moshi.MoshiConverterFactory
+import java.util.concurrent.TimeUnit
 import javax.inject.Singleton
 
-@InstallIn(SingletonComponent::class)
+
 @Module
+@InstallIn(SingletonComponent::class)
 object AppModule {
 
     @Provides
@@ -27,11 +31,19 @@ object AppModule {
             .add(KotlinJsonAdapterFactory())
             .build()
 
+
     @Provides
     @Singleton
     fun providesPrestamoApi(moshi: Moshi): PrestAppApi {
+        val okHttpClient = OkHttpClient.Builder()
+            .connectTimeout(30, TimeUnit.SECONDS)
+            .readTimeout(30, TimeUnit.SECONDS)
+            .writeTimeout(30, TimeUnit.SECONDS)
+            .build()
+
         return Retrofit.Builder()
             .baseUrl("https://prestappservice.azurewebsites.net/")
+            .client(okHttpClient)
             .addConverterFactory(MoshiConverterFactory.create(moshi))
             .build()
             .create(PrestAppApi::class.java)
@@ -44,12 +56,20 @@ object AppModule {
             appContext,
             PrestAppDb::class.java,
             "prestapp.db"
-        ).fallbackToDestructiveMigration().build()
+        )
+            .fallbackToDestructiveMigration()
+            .build()
     }
 
     @Provides
     @Singleton
     fun provideRutaDao(database: PrestAppDb): RutaDao {
         return database.rutaDao()
+    }
+
+    @Provides
+    @Singleton
+    fun provideConnectivityReceiver(@ApplicationContext context: Context): ConnectivityReceiver {
+        return ConnectivityReceiver(context)
     }
 }

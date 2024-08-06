@@ -6,27 +6,27 @@ import kotlinx.coroutines.flow.Flow
 
 @Dao
 interface RutaDao {
-    @Query("SELECT * FROM rutas")
+    @Query("SELECT * FROM rutas WHERE isDeleted = 0")
     fun getRutas(): Flow<List<RutaEntity>>
 
-    @Query("SELECT * FROM rutas WHERE rutaID = :id")
-    fun getRutaById(id: Int): Flow<RutaEntity>
+    @Query("SELECT * FROM rutas WHERE rutaID = :rutaId")
+    fun getRutaById(rutaId: Int): Flow<RutaEntity>
+
+    @Query("SELECT * FROM rutas WHERE isPending = 1 OR isDeleted = 1")
+    fun getPendingRutas(): List<RutaEntity>
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    suspend fun insertRuta(ruta: RutaEntity)
-
-    @Insert(onConflict = OnConflictStrategy.REPLACE)
-    suspend fun insertRutas(rutas: List<RutaEntity>)
-
-    @Query("DELETE FROM rutas")
-    suspend fun deleteAllRutas()
+    suspend fun insertRuta(ruta: RutaEntity): Long
 
     @Update
     suspend fun updateRuta(ruta: RutaEntity)
 
+    @Query("UPDATE rutas SET rutaID = :newRutaId WHERE rutaID = :oldRutaId")
+    suspend fun updateRutaId(oldRutaId: Int, newRutaId: Int)
+
     @Delete
     suspend fun deleteRuta(ruta: RutaEntity)
 
-    @Query("DELETE FROM rutas WHERE rutaID = :id")
-    suspend fun deleteRutaById(id: Int)
+    @Query("DELETE FROM rutas WHERE rutaID = :rutaId")
+    suspend fun deleteRutaById(rutaId: Int)
 }

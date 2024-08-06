@@ -8,10 +8,9 @@ data class RutaDto(
     val descripcion: String?
 )
 
-fun RutaDto.toEntity(): RutaEntity {
-    return RutaEntity(
-        rutaID = this.rutaID,
-        nombre = this.nombre,
-        descripcion = this.descripcion
-    )
-}
+fun RutaDto.toEntity() = RutaEntity(
+    rutaID = rutaID,
+    nombre = nombre,
+    descripcion = descripcion,
+    isPending = true
+)
