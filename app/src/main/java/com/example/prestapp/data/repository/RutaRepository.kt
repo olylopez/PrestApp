@@ -27,6 +27,8 @@ class RutaRepository @Inject constructor(
     private val prestAppApi: PrestAppApi,
     private val connectivityReceiver: ConnectivityReceiver
 ) {
+    private var tempIdCounter = -1
+
     init {
         observeConnectivity()
     }
@@ -56,7 +58,7 @@ class RutaRepository @Inject constructor(
     }
 
     suspend fun syncPendingRutas() {
-        val pendingRutas = rutaDao.getUnsyncedRutas()
+        val pendingRutas = rutaDao.getPendingRutas()
         Log.d("RutaRepository", "Pending rutas to sync: ${pendingRutas.size}")
         pendingRutas.forEach { ruta ->
             try {
@@ -64,43 +66,40 @@ class RutaRepository @Inject constructor(
                     Log.d("RutaRepository", "Deleting ruta: ${ruta.rutaID}")
                     val response = prestAppApi.deleteRuta(ruta.rutaID)
                     if (response.isSuccessful || response.code() == 404) {
-                        try {
-                            rutaDao.deleteRutaById(ruta.rutaID)
-                            Log.d("RutaRepository", "Deleted ruta locally: ${ruta.rutaID}")
-                        } catch (dbEx: Exception) {
-                            Log.e("RutaRepository", "Failed to delete ruta locally: ${dbEx.localizedMessage}", dbEx)
-                        }
+                        rutaDao.deleteRutaById(ruta.rutaID)
+                        Log.d("RutaRepository", "Deleted ruta locally: ${ruta.rutaID}")
                     } else {
                         Log.e("RutaRepository", "Failed to delete ruta from server: ${ruta.rutaID}, response code: ${response.code()}")
                     }
-                } else {
-                    if (ruta.rutaID == 0) {
+                } else if (ruta.isPending) {
+                    if (ruta.rutaID < 0) {
                         Log.d("RutaRepository", "Posting new ruta")
                         val response = prestAppApi.postRuta(ruta.toDto())
                         if (response.isSuccessful) {
                             val remoteRuta = response.body()!!
-                            rutaDao.updateRuta(ruta.copy(isSynced = true, rutaID = remoteRuta.rutaID))
+                            rutaDao.updateRutaId(ruta.rutaID, remoteRuta.rutaID)
+                            rutaDao.updateRuta(ruta.copy(isPending = false, rutaID = remoteRuta.rutaID))
                             Log.d("RutaRepository", "Synced new ruta with server: ${remoteRuta.rutaID}")
                         } else {
-                            Log.e("RutaRepository", "Failed to post new ruta to server")
+                            Log.e("RutaRepository", "Failed to post new ruta to server: ${response.code()} - ${response.message()}")
                         }
                     } else {
                         Log.d("RutaRepository", "Updating ruta: ${ruta.rutaID}")
                         val response = prestAppApi.putRuta(ruta.rutaID, ruta.toDto())
                         if (response.isSuccessful) {
-                            rutaDao.updateRuta(ruta.copy(isSynced = true))
+                            rutaDao.updateRuta(ruta.copy(isPending = false))
                             Log.d("RutaRepository", "Synced updated ruta with server: ${ruta.rutaID}")
                         } else if (response.code() == 404) {
                             val remoteRuta = findRutaOnServer(ruta.nombre, ruta.descripcion)
                             if (remoteRuta != null) {
-                                rutaDao.updateRuta(ruta.copy(isSynced = true, rutaID = remoteRuta.rutaID))
+                                rutaDao.updateRutaId(ruta.rutaID, remoteRuta.rutaID)
+                                rutaDao.updateRuta(ruta.copy(isPending = false, rutaID = remoteRuta.rutaID))
                                 Log.d("RutaRepository", "Updated local ID to server ID: ${remoteRuta.rutaID}")
                             } else {
-                                rutaDao.deleteRutaById(ruta.rutaID)
-                                Log.d("RutaRepository", "Deleted ruta locally due to 404 from server: ${ruta.rutaID}")
+                                Log.e("RutaRepository", "Ruta not found on server, not deleting locally: ${ruta.rutaID}")
                             }
                         } else {
-                            Log.e("RutaRepository", "Failed to update ruta on server: ${ruta.rutaID}, response code: ${response.code()}")
+                            Log.e("RutaRepository", "Failed to update ruta on server: ${ruta.rutaID}, response code: ${response.code()} - ${response.message()}")
                         }
                     }
                 }
@@ -125,7 +124,7 @@ class RutaRepository @Inject constructor(
     }
 
     suspend fun addRuta(rutaDto: RutaDto) {
-        val entity = rutaDto.toEntity().copy(isSynced = false)
+        val entity = rutaDto.toEntity().copy(isPending = true, rutaID = generateTempId())
         val localId = rutaDao.insertRuta(entity)
         val localEntity = rutaDao.getRutaById(localId.toInt()).first()
         Log.d("RutaRepository", "Inserted route locally: $localEntity")
@@ -135,7 +134,8 @@ class RutaRepository @Inject constructor(
                 val response = prestAppApi.postRuta(rutaDto)
                 if (response.isSuccessful) {
                     val remoteRuta = response.body()!!
-                    rutaDao.updateRuta(localEntity.copy(isSynced = true, rutaID = remoteRuta.rutaID))
+                    rutaDao.updateRutaId(localEntity.rutaID, remoteRuta.rutaID)
+                    rutaDao.updateRuta(localEntity.copy(isPending = false, rutaID = remoteRuta.rutaID))
                     Log.d("RutaRepository", "Synced new route with server: $remoteRuta")
                 } else {
                     Log.e("RutaRepository", "Failed to post new route to server")
@@ -147,7 +147,7 @@ class RutaRepository @Inject constructor(
     }
 
     suspend fun updateRuta(rutaDto: RutaDto) {
-        val entity = rutaDto.toEntity().copy(isSynced = false)
+        val entity = rutaDto.toEntity().copy(isPending = true)
         rutaDao.updateRuta(entity)
         Log.d("RutaRepository", "Updated route locally: $entity")
 
@@ -155,16 +155,16 @@ class RutaRepository @Inject constructor(
             try {
                 val response = prestAppApi.putRuta(entity.rutaID, rutaDto)
                 if (response.isSuccessful) {
-                    rutaDao.updateRuta(entity.copy(isSynced = true))
+                    rutaDao.updateRuta(entity.copy(isPending = false))
                     Log.d("RutaRepository", "Synced updated route with server: ${entity.rutaID}")
                 } else if (response.code() == 404) {
                     val remoteRuta = findRutaOnServer(entity.nombre, entity.descripcion)
                     if (remoteRuta != null) {
-                        rutaDao.updateRuta(entity.copy(isSynced = true, rutaID = remoteRuta.rutaID))
+                        rutaDao.updateRutaId(entity.rutaID, remoteRuta.rutaID)
+                        rutaDao.updateRuta(entity.copy(isPending = false, rutaID = remoteRuta.rutaID))
                         Log.d("RutaRepository", "Updated local ID to server ID: ${remoteRuta.rutaID}")
                     } else {
-                        rutaDao.deleteRutaById(entity.rutaID)
-                        Log.d("RutaRepository", "Deleted ruta locally due to 404 from server: ${entity.rutaID}")
+                        Log.e("RutaRepository", "Ruta not found on server, not deleting locally: ${entity.rutaID}")
                     }
                 } else {
                     Log.e("RutaRepository", "Failed to update route on server: ${entity.rutaID}, response code: ${response.code()}")
@@ -203,6 +203,14 @@ class RutaRepository @Inject constructor(
                 }
             }
         }
+    }
+
+    suspend fun triggerManualSync() {
+        syncPendingRutas()
+    }
+
+    private fun generateTempId(): Int {
+        return tempIdCounter--
     }
 }
 

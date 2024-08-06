@@ -9,7 +9,8 @@ data class RutaDto(
 )
 
 fun RutaDto.toEntity() = RutaEntity(
-    rutaID = this.rutaID,
-    nombre = this.nombre,
-    descripcion = this.descripcion
+    rutaID = rutaID,
+    nombre = nombre,
+    descripcion = descripcion,
+    isPending = true
 )

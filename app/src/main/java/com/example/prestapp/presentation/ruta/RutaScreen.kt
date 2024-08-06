@@ -198,22 +198,5 @@ fun RutaBody(
             }
         }
 
-        Spacer(modifier = Modifier.height(16.dp))
-
-        if (!uiState.isConnected) {
-            Text(
-                text = "No hay conexión a Internet",
-                color = Color.Red,
-                textAlign = TextAlign.Center,
-                modifier = Modifier.padding(top = 16.dp)
-            )
-        } else {
-            Text(
-                text = if (uiState.isSyncing) "Sincronizando datos..." else "Datos sincronizados",
-                color = if (uiState.isSyncing) Color.Yellow else Color.Green,
-                textAlign = TextAlign.Center,
-                modifier = Modifier.padding(top = 16.dp)
-            )
-        }
     }
 }

@@ -62,7 +62,7 @@ fun RutaListScreen(
                                     color = if (uiState.isConnected) Color.Green else Color.Red,
                                     modifier = Modifier.padding(end = 8.dp)
                                 )
-                                IconButton(onClick = { viewModel.syncRutas() }) {
+                                IconButton(onClick = { viewModel.triggerManualSync() }) {
                                     if (uiState.isSyncing) {
                                         CircularProgressIndicator(
                                             modifier = Modifier.size(24.dp),

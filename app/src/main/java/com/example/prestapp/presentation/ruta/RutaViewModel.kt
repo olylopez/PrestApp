@@ -52,24 +52,13 @@ class RutaViewModel @Inject constructor(
         } else {
             viewModelScope.launch {
                 repository.getRutaById(rutaId).collect { ruta ->
-                    if (ruta != null) {
-                        uiState.update {
-                            it.copy(
-                                rutaID = ruta.rutaID,
-                                nombre = ruta.nombre,
-                                descripcion = ruta.descripcion ?: "",
-                                isLoading = false
-                            )
-                        }
-                    } else {
-                        uiState.update {
-                            it.copy(
-                                rutaID = 0,
-                                nombre = "",
-                                descripcion = "",
-                                isLoading = false
-                            )
-                        }
+                    uiState.update {
+                        it.copy(
+                            rutaID = ruta.rutaID,
+                            nombre = ruta.nombre,
+                            descripcion = ruta.descripcion ?: "",
+                            isLoading = false
+                        )
                     }
                 }
             }
@@ -156,6 +145,18 @@ class RutaViewModel @Inject constructor(
             }
         }
     }
+
+    fun triggerManualSync() {
+        viewModelScope.launch {
+            uiState.update { it.copy(isSyncing = true) }
+            try {
+                repository.triggerManualSync()
+                uiState.update { it.copy(isSyncing = false, errorMessage = null) }
+            } catch (e: Exception) {
+                uiState.update { it.copy(isSyncing = false, errorMessage = e.localizedMessage) }
+            }
+        }
+    }
 }
 
 data class RutaUIState(
@@ -177,8 +178,3 @@ fun RutaUIState.toDTO() = RutaDto(
     nombre = nombre,
     descripcion = descripcion
 )
-
-
-
-
-

@@ -7,15 +7,15 @@ import com.example.prestapp.data.remote.dtos.RutaDto
 @Entity(tableName = "rutas")
 data class RutaEntity(
     @PrimaryKey(autoGenerate = true)
-    val rutaID: Int = 0,
+    val rutaID: Int,
     val nombre: String,
     val descripcion: String?,
-    val isSynced: Boolean = false,
+    val isPending: Boolean = true,
     val isDeleted: Boolean = false
 )
 
 fun RutaEntity.toDto() = RutaDto(
-    rutaID = this.rutaID,
-    nombre = this.nombre,
-    descripcion = this.descripcion
+    rutaID = rutaID,
+    nombre = nombre,
+    descripcion = descripcion
 )

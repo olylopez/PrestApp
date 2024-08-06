@@ -10,7 +10,7 @@ import com.example.prestapp.data.local.entities.RutaEntity
         RutaEntity::class
 
     ],
-    version = 1,
+    version = 2,
     exportSchema = false
 )
 abstract class PrestAppDb : RoomDatabase(){
