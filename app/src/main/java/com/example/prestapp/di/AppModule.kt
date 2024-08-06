@@ -2,6 +2,7 @@ package com.example.prestapp.di
 
 import android.content.Context
 import androidx.room.Room
+import com.example.prestapp.ConnectivityReceiver
 import com.example.prestapp.data.local.dao.RutaDao
 import com.example.prestapp.data.local.database.PrestAppDb
 import com.example.prestapp.data.remote.PrestAppApi
@@ -16,8 +17,9 @@ import retrofit2.Retrofit
 import retrofit2.converter.moshi.MoshiConverterFactory
 import javax.inject.Singleton
 
-@InstallIn(SingletonComponent::class)
+
 @Module
+@InstallIn(SingletonComponent::class)
 object AppModule {
 
     @Provides
@@ -44,12 +46,20 @@ object AppModule {
             appContext,
             PrestAppDb::class.java,
             "prestapp.db"
-        ).fallbackToDestructiveMigration().build()
+        )
+            .fallbackToDestructiveMigration()
+            .build()
     }
 
     @Provides
     @Singleton
     fun provideRutaDao(database: PrestAppDb): RutaDao {
         return database.rutaDao()
+    }
+
+    @Provides
+    @Singleton
+    fun provideConnectivityReceiver(@ApplicationContext context: Context): ConnectivityReceiver {
+        return ConnectivityReceiver(context)
     }
 }

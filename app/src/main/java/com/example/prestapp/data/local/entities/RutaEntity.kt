@@ -4,19 +4,18 @@ import androidx.room.Entity
 import androidx.room.PrimaryKey
 import com.example.prestapp.data.remote.dtos.RutaDto
 
-
-
 @Entity(tableName = "rutas")
 data class RutaEntity(
-    @PrimaryKey(autoGenerate = true) val rutaID: Int = 0,
+    @PrimaryKey(autoGenerate = true)
+    val rutaID: Int = 0,
     val nombre: String,
-    val descripcion: String?
+    val descripcion: String?,
+    val isSynced: Boolean = false,
+    val isDeleted: Boolean = false
 )
 
-fun RutaEntity.toDto(): RutaDto {
-    return RutaDto(
-        rutaID = this.rutaID,
-        nombre = this.nombre,
-        descripcion = this.descripcion
-    )
-}
+fun RutaEntity.toDto() = RutaDto(
+    rutaID = this.rutaID,
+    nombre = this.nombre,
+    descripcion = this.descripcion
+)

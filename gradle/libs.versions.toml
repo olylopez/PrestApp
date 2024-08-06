@@ -28,6 +28,8 @@ uiCompose = "1.7.0-alpha07"
 composeAnimation = "1.6.8"
 foundationCompose = "1.0.7-alpha07"
 material = "1.12.0"
+firebaseComponents = "18.0.0"
+hiltWork = "1.2.0"
 
 
 [libraries]
@@ -66,6 +68,8 @@ androidx-foundation-android = { group = "androidx.compose.foundation", name = "f
 kotlinx-serialization-json = { module = "org.jetbrains.kotlinx:kotlinx-serialization-json", version.ref = "kotlinxSerializationJson" }
 material = { group = "com.google.android.material", name = "material", version.ref = "material" }
 material3 = { module = "androidx.compose.material3:material3", version.ref = "material3" }
+firebase-components = { group = "com.google.firebase", name = "firebase-components", version.ref = "firebaseComponents" }
+androidx-hilt-work = { group = "androidx.hilt", name = "hilt-work", version.ref = "hiltWork" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }

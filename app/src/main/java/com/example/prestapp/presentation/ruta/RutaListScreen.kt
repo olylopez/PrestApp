@@ -9,6 +9,7 @@ import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Delete
+import androidx.compose.material.icons.filled.Sync
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
@@ -46,11 +47,33 @@ fun RutaListScreen(
                 Column {
                     TopAppBar(
                         title = {
-                            Text(
-                                text = "Lista de Rutas",
-                                modifier = Modifier.fillMaxWidth(),
-                                textAlign = TextAlign.Center
-                            )
+                            Row(
+                                verticalAlignment = Alignment.CenterVertically,
+                                horizontalArrangement = Arrangement.Center,
+                                modifier = Modifier.fillMaxWidth()
+                            ) {
+                                Text(
+                                    text = "Lista de Rutas",
+                                    modifier = Modifier.weight(1f),
+                                    textAlign = TextAlign.Center
+                                )
+                                Text(
+                                    text = if (uiState.isConnected) "Conectado" else "Desconectado",
+                                    color = if (uiState.isConnected) Color.Green else Color.Red,
+                                    modifier = Modifier.padding(end = 8.dp)
+                                )
+                                IconButton(onClick = { viewModel.syncRutas() }) {
+                                    if (uiState.isSyncing) {
+                                        CircularProgressIndicator(
+                                            modifier = Modifier.size(24.dp),
+                                            color = MaterialTheme.colorScheme.onPrimary,
+                                            strokeWidth = 2.dp
+                                        )
+                                    } else {
+                                        Icon(Icons.Default.Sync, contentDescription = "Sync")
+                                    }
+                                }
+                            }
                         }
                     )
                     OutlinedTextField(
@@ -97,6 +120,22 @@ fun RutaListScreen(
                 Text(
                     text = errorMessage,
                     color = Color.Red,
+                    textAlign = TextAlign.Center,
+                    modifier = Modifier.padding(top = 16.dp)
+                )
+            }
+
+            if (!uiState.isConnected) {
+                Text(
+                    text = "No hay conexión a Internet",
+                    color = Color.Red,
+                    textAlign = TextAlign.Center,
+                    modifier = Modifier.padding(top = 16.dp)
+                )
+            } else {
+                Text(
+                    text = if (uiState.isSyncing) "Sincronizando datos..." else "Datos sincronizados",
+                    color = if (uiState.isSyncing) Color.Yellow else Color.Green,
                     textAlign = TextAlign.Center,
                     modifier = Modifier.padding(top = 16.dp)
                 )

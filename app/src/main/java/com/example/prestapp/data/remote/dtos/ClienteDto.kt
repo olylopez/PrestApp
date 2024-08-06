@@ -1,5 +1,7 @@
 package com.example.prestapp.data.remote.dtos
 
+import com.example.prestapp.data.local.entities.RutaEntity
+
 class ClienteDto(
     val clienteID: Int,
     val nombre: String,
@@ -13,3 +15,18 @@ class ClienteDto(
     val balance: Double,
     val estaAlDia: Boolean
 )
+
+/*fun RutaDto.toEntity(): RutaEntity {
+    return RutaEntity(
+        rutaID = this.rutaID,
+        nombre = this.nombre,
+        descripcion = this.descripcion
+    )
+}
+fun RutaEntity.toDto(): RutaDto {
+    return RutaDto(
+        rutaID = this.rutaID,
+        nombre = this.nombre,
+        descripcion = this.descripcion
+    )
+}*/

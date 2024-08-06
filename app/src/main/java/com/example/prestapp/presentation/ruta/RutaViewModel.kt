@@ -2,6 +2,7 @@ package com.example.prestapp.presentation.ruta
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.prestapp.ConnectivityReceiver
 import com.example.prestapp.data.local.entities.RutaEntity
 import com.example.prestapp.data.remote.dtos.RutaDto
 import com.example.prestapp.data.repository.RutaRepository
@@ -22,18 +23,54 @@ class RutaViewModel @Inject constructor(
         viewModelScope.launch {
             getRutas()
         }
+        observeConnectivity()
     }
 
-    fun onSetRuta(rutaId: Int) {
+    private fun observeConnectivity() {
         viewModelScope.launch {
-            val ruta = repository.getRutaById(rutaId).firstOrNull()
-            ruta?.let {
+            repository.isConnectedFlow().collect { isConnected ->
+                if (isConnected) {
+                    syncRutas()
+                }
                 uiState.update {
-                    it.copy(
-                        rutaID = ruta.rutaID,
-                        nombre = ruta.nombre,
-                        descripcion = ruta.descripcion ?: ""
-                    )
+                    it.copy(isConnected = isConnected)
+                }
+            }
+        }
+    }
+
+    fun onSetRuta(rutaId: Int?) {
+        if (rutaId == null || rutaId == 0) {
+            uiState.update {
+                it.copy(
+                    rutaID = 0,
+                    nombre = "",
+                    descripcion = "",
+                    isLoading = false
+                )
+            }
+        } else {
+            viewModelScope.launch {
+                repository.getRutaById(rutaId).collect { ruta ->
+                    if (ruta != null) {
+                        uiState.update {
+                            it.copy(
+                                rutaID = ruta.rutaID,
+                                nombre = ruta.nombre,
+                                descripcion = ruta.descripcion ?: "",
+                                isLoading = false
+                            )
+                        }
+                    } else {
+                        uiState.update {
+                            it.copy(
+                                rutaID = 0,
+                                nombre = "",
+                                descripcion = "",
+                                isLoading = false
+                            )
+                        }
+                    }
                 }
             }
         }
@@ -100,16 +137,22 @@ class RutaViewModel @Inject constructor(
 
     private fun getRutas() {
         viewModelScope.launch {
-            repository.getRutas().collect { result ->
-                when (result) {
-                    is Resource.Loading -> uiState.update { it.copy(isLoading = true) }
-                    is Resource.Success -> uiState.update {
-                        it.copy(isLoading = false, rutas = result.data ?: emptyList())
-                    }
-                    is Resource.Error -> uiState.update {
-                        it.copy(isLoading = false, errorMessage = result.message)
-                    }
+            repository.getRutas().collect { rutas ->
+                uiState.update {
+                    it.copy(isLoading = false, rutas = rutas)
                 }
+            }
+        }
+    }
+
+    fun syncRutas() {
+        viewModelScope.launch {
+            uiState.update { it.copy(isSyncing = true) }
+            try {
+                repository.syncPendingRutas()
+                uiState.update { it.copy(isSyncing = false, errorMessage = null) }
+            } catch (e: Exception) {
+                uiState.update { it.copy(isSyncing = false, errorMessage = e.localizedMessage) }
             }
         }
     }
@@ -124,6 +167,8 @@ data class RutaUIState(
     var descripcionError: Boolean = false,
     val rutas: List<RutaEntity> = emptyList(),
     val isLoading: Boolean = false,
+    val isSyncing: Boolean = false,
+    val isConnected: Boolean = true,
     val errorMessage: String? = null
 )
 
@@ -132,3 +177,8 @@ fun RutaUIState.toDTO() = RutaDto(
     nombre = nombre,
     descripcion = descripcion
 )
+
+
+
+
+
