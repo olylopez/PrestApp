@@ -40,16 +40,15 @@ fun <T> DropDownInput(
     ExposedDropdownMenuBox(
         expanded = expanded,
         onExpandedChange = { expanded = !expanded }
-    ) {
-        Column {
+    ){
+        Column{
             OutlinedTextField(
                 value = selectedItem,
                 readOnly = true,
                 onValueChange = { selectedText = it },
                 modifier = Modifier
                     .clickable { expanded = !expanded }
-                    .menuAnchor()
-                    .fillMaxWidth(),
+                    .menuAnchor().fillMaxWidth(),
                 label = { Text(label) },
                 trailingIcon = {
                     Icon(icon, contentDescription = "inputSelect",
@@ -74,5 +73,4 @@ fun <T> DropDownInput(
             }
         }
     }
-
 }

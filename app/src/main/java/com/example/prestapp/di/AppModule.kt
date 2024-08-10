@@ -3,6 +3,9 @@ package com.example.prestapp.di
 import android.content.Context
 import androidx.room.Room
 import com.example.prestapp.ConnectivityReceiver
+import com.example.prestapp.data.local.dao.ClienteDao
+import com.example.prestapp.data.local.dao.PagoDao
+import com.example.prestapp.data.local.dao.PrestamoDao
 import com.example.prestapp.data.local.dao.RutaDao
 import com.example.prestapp.data.local.database.PrestAppDb
 import com.example.prestapp.data.remote.PrestAppApi
@@ -28,9 +31,9 @@ object AppModule {
     @Singleton
     fun providesMoshi(): Moshi =
         Moshi.Builder()
+            .add(BigDecimalAdapter())
             .add(KotlinJsonAdapterFactory())
             .build()
-
 
     @Provides
     @Singleton
@@ -65,6 +68,23 @@ object AppModule {
     @Singleton
     fun provideRutaDao(database: PrestAppDb): RutaDao {
         return database.rutaDao()
+    }
+
+    @Provides
+    @Singleton
+    fun provideClienteDao(database: PrestAppDb): ClienteDao {
+        return database.clienteDao()
+    }
+
+    @Provides
+    @Singleton
+    fun providePrstamooDao(database: PrestAppDb): PrestamoDao {
+        return database.prestamoDao()
+    }
+    @Provides
+    @Singleton
+    fun providePagoDao(database: PrestAppDb): PagoDao {
+        return database.pagoDao()
     }
 
     @Provides

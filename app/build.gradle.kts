@@ -54,10 +54,13 @@ android {
 
 dependencies {
 
+    // mask
+
     //HILT
     implementation("com.google.dagger:hilt-android:2.51")
     implementation(libs.firebase.components)
     implementation(libs.androidx.hilt.work)
+    implementation(libs.androidx.media3.exoplayer)
     //noinspection UseTomlInstead
     ksp("com.google.dagger:hilt-android-compiler:2.51")
     implementation("androidx.hilt:hilt-navigation-compose:1.2.0")
