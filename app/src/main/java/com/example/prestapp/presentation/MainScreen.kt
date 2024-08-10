@@ -64,8 +64,14 @@ fun MainScreen(navController: NavHostController) {
                     modifier = Modifier.fillMaxWidth(),
                     horizontalArrangement = Arrangement.SpaceBetween
                 ) {
-                    BasicText(text = "Clientes: 122", style = MaterialTheme.typography.bodyLarge.copy(color = primaryTextColor, fontFamily = robotoFont, fontWeight = FontWeight.Bold))
-                    BasicText(text = "Rutas: 5", style = MaterialTheme.typography.bodyLarge.copy(color = primaryTextColor, fontFamily = robotoFont, fontWeight = FontWeight.Bold))
+                    BasicText(text = "Clientes: 122",
+                        style = MaterialTheme.typography.bodyLarge.copy
+                            (color = primaryTextColor, fontFamily = robotoFont,
+                            fontWeight = FontWeight.Bold))
+                    BasicText(text = "Rutas: 5",
+                        style = MaterialTheme.typography.bodyLarge.copy
+                            (color = primaryTextColor,
+                            fontFamily = robotoFont, fontWeight = FontWeight.Bold))
                 }
 
                 Spacer(modifier = Modifier.height(16.dp))
@@ -82,7 +88,11 @@ fun MainScreen(navController: NavHostController) {
             }
 
 
-            Text(text = "PREST APP", style = MaterialTheme.typography.headlineLarge.copy(color = primaryTextColor, fontSize = 32.sp, fontFamily = lobsterFont, fontWeight = FontWeight.Bold, textAlign = TextAlign.Center))
+            Text(text = "PREST APP",
+                style = MaterialTheme.typography.headlineLarge.copy
+                    (color = primaryTextColor,
+                    fontSize = 32.sp, fontFamily = lobsterFont,
+                    fontWeight = FontWeight.Bold, textAlign = TextAlign.Center))
 
             Spacer(modifier = Modifier.height(16.dp))
             Spacer(modifier = Modifier.height(8.dp))
@@ -101,7 +111,7 @@ fun MainScreen(navController: NavHostController) {
                         modifier = Modifier
                             .size(80.dp)
                             .background(color = buttonGreen, shape = CircleShape)
-                            .clickable { navController.navigate(Screen.ClientesList) },
+                            .clickable { navController.navigate(Screen.PrestamoPorRuta.toString()) },
                         contentAlignment = Alignment.Center
                     ) {
                         Column(
@@ -114,7 +124,8 @@ fun MainScreen(navController: NavHostController) {
                                 colorFilter = ColorFilter.tint(Color.White)
                             )
                             Spacer(modifier = Modifier.height(4.dp))
-                            Text(text = "COBRO", color = Color.White, textAlign = TextAlign.Center, fontSize = 10.sp)
+                            Text(text = "COBRO", color = Color.White,
+                                textAlign = TextAlign.Center, fontSize = 10.sp)
                         }
                     }
 
@@ -123,7 +134,7 @@ fun MainScreen(navController: NavHostController) {
                         modifier = Modifier
                             .size(80.dp)
                             .background(color = buttonGreen, shape = CircleShape)
-                            .clickable { navController.navigate(Screen.PrestamoForm) },
+                            .clickable { navController.navigate(Screen.PrestamoRegistro.toString()) },
                         contentAlignment = Alignment.Center
                     ) {
                         Column(
@@ -136,7 +147,8 @@ fun MainScreen(navController: NavHostController) {
                                 colorFilter = ColorFilter.tint(Color.White)
                             )
                             Spacer(modifier = Modifier.height(4.dp))
-                            Text(text = "PRÉSTAMO", color = Color.White, textAlign = TextAlign.Center, fontSize = 10.sp)
+                            Text(text = "PRÉSTAMO", color = Color.White,
+                                textAlign = TextAlign.Center, fontSize = 10.sp)
                         }
                     }
                 }
@@ -153,7 +165,7 @@ fun MainScreen(navController: NavHostController) {
                         modifier = Modifier
                             .size(80.dp)
                             .background(color = buttonGreen, shape = CircleShape)
-                            .clickable { navController.navigate(Screen.HistorialCobros) },
+                            .clickable { navController.navigate(Screen.HistorialCobros.toString()) },
                         contentAlignment = Alignment.Center
                     ) {
                         Column(
@@ -166,7 +178,8 @@ fun MainScreen(navController: NavHostController) {
                                 colorFilter = ColorFilter.tint(Color.White)
                             )
                             Spacer(modifier = Modifier.height(4.dp))
-                            Text(text = "HISTORIAL", color = Color.White, textAlign = TextAlign.Center, fontSize = 10.sp)
+                            Text(text = "HISTORIAL", color = Color.White,
+                                textAlign = TextAlign.Center, fontSize = 10.sp)
                         }
                     }
 
@@ -175,7 +188,7 @@ fun MainScreen(navController: NavHostController) {
                         modifier = Modifier
                             .size(80.dp)
                             .background(color = buttonGreen, shape = CircleShape)
-                            .clickable { navController.navigate(Screen.ClientesList) },
+                            .clickable { navController.navigate(Screen.ClienteList.toString()) },
                         contentAlignment = Alignment.Center
                     ) {
                         Column(
@@ -188,7 +201,8 @@ fun MainScreen(navController: NavHostController) {
                                 colorFilter = ColorFilter.tint(Color.White)
                             )
                             Spacer(modifier = Modifier.height(4.dp))
-                            Text(text = "CLIENTES", color = Color.White, textAlign = TextAlign.Center, fontSize = 10.sp)
+                            Text(text = "CLIENTES", color = Color.White,
+                                textAlign = TextAlign.Center, fontSize = 10.sp)
                         }
                     }
                 }
@@ -223,8 +237,12 @@ fun MainScreen(navController: NavHostController) {
             if (showDialog) {
                 ConfiguracionDialog(
                     onDismissRequest = { showDialog = false },
-                    onUsersClick = { navController.navigate(Screen.UsuariosList.toString()); showDialog = false },
-                    onRutasClick = { navController.navigate(Screen.RutaListScreen.toString()); showDialog = false }
+                    onUsersClick = {
+                        navController.navigate(Screen.UsuariosList.toString());
+                        showDialog = false },
+                    onRutasClick = {
+                        navController.navigate(Screen.RutaListScreen.toString());
+                        showDialog = false }
                 )
             }
         }

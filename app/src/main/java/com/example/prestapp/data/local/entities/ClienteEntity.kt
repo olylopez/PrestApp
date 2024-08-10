@@ -1,10 +1,13 @@
-package com.example.prestapp.data.remote.dtos
+package com.example.prestapp.data.local.entities
 
-import com.example.prestapp.data.local.entities.ClienteEntity
-import com.example.prestapp.data.local.entities.RutaEntity
+import androidx.room.Entity
+import androidx.room.PrimaryKey
+import com.example.prestapp.data.remote.dtos.ClienteDto
 import java.math.BigDecimal
 
-data class ClienteDto(
+@Entity(tableName = "clientes")
+data class ClienteEntity(
+    @PrimaryKey(autoGenerate = true)
     val clienteID: Int,
     val nombre: String,
     val apodo: String?,
@@ -14,11 +17,13 @@ data class ClienteDto(
     val celular: String,
     val cedula: String,
     val foto: String?,
-    val balance: BigDecimal,
-    val estaAlDia: Boolean
+    val balance: Double,
+    val estaAlDia: Boolean,
+    val isPending: Boolean = true,
+    val isDeleted: Boolean = false
 )
 
-fun ClienteDto.toEntity() = ClienteEntity(
+fun ClienteEntity.toDto() = ClienteDto(
     clienteID = clienteID,
     nombre = nombre,
     apodo = apodo,
@@ -28,9 +33,6 @@ fun ClienteDto.toEntity() = ClienteEntity(
     celular = celular,
     cedula = cedula,
     foto = foto,
-    balance = balance.toDouble(),
-    estaAlDia = estaAlDia,
-    isPending = true
+    balance = balance.toBigDecimal(),
+    estaAlDia = estaAlDia
 )
-
-

@@ -8,48 +8,51 @@ interface PrestAppApi {
 
     // Cliente Endpoints
     @GET("api/Clientes")
-    suspend fun getClientes(): List<ClienteDto>
+    suspend fun getClientes(): Response<List<ClienteDto>>
 
     @GET("api/Clientes/{id}")
-    suspend fun getCliente(@Path("id") id: Int): ClienteDto
+    suspend fun getCliente(@Path("id") id: Int): Response<ClienteDto>
 
     @POST("api/Clientes")
-    suspend fun postCliente(@Body cliente: ClienteDto): ClienteDto
+    suspend fun postCliente(@Body clienteDto: ClienteDto): Response<ClienteDto>
 
     @PUT("api/Clientes/{id}")
-    suspend fun putCliente(@Path("id") id: Int, @Body cliente: ClienteDto): ClienteDto
+    suspend fun putCliente(@Path("id") id: Int, @Body clienteDto: ClienteDto): Response<ClienteDto>
 
     @DELETE("api/Clientes/{id}")
     suspend fun deleteCliente(@Path("id") id: Int): Response<Unit>
 
+    @GET("api/Clientes/cedula/{cedula}")
+    suspend fun getClienteByCedula(@Path("cedula") cedula: String): Response<ClienteDto>
+
     // Prestamo Endpoints
     @GET("api/Prestamos")
-    suspend fun getPrestamos(): List<PrestamoDto>
+    suspend fun getPrestamos(): Response<List<PrestamoDto>>
 
     @GET("api/Prestamos/{id}")
-    suspend fun getPrestamo(@Path("id") id: Int): PrestamoDto
+    suspend fun getPrestamo(@Path("id") id: Int): Response<PrestamoDto>
 
     @POST("api/Prestamos")
-    suspend fun postPrestamo(@Body prestamo: PrestamoDto): PrestamoDto
+    suspend fun postPrestamo(@Body prestamo: PrestamoDto): Response<PrestamoDto>
 
     @PUT("api/Prestamos/{id}")
-    suspend fun putPrestamo(@Path("id") id: Int, @Body prestamo: PrestamoDto): PrestamoDto
+    suspend fun putPrestamo(@Path("id") id: Int, @Body prestamo: PrestamoDto): Response<PrestamoDto>
 
     @DELETE("api/Prestamos/{id}")
     suspend fun deletePrestamo(@Path("id") id: Int): Response<Unit>
 
     // Pago Endpoints
     @GET("api/Pagos")
-    suspend fun getPagos(): List<PagoDto>
+    suspend fun getPagos(): Response<List<PagoDto>>
 
     @GET("api/Pagos/{id}")
-    suspend fun getPago(@Path("id") id: Int): PagoDto
+    suspend fun getPago(@Path("id") id: Int): Response<PagoDto>
 
     @POST("api/Pagos")
-    suspend fun postPago(@Body pago: PagoDto): PagoDto
+    suspend fun postPago(@Body pago: PagoDto): Response<PagoDto>
 
     @PUT("api/Pagos/{id}")
-    suspend fun putPago(@Path("id") id: Int, @Body pago: PagoDto): PagoDto
+    suspend fun putPago(@Path("id") id: Int, @Body pago: PagoDto): Response<PagoDto>
 
     @DELETE("api/Pagos/{id}")
     suspend fun deletePago(@Path("id") id: Int): Response<Unit>
