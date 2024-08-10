@@ -1,4 +1,4 @@
-Entra y conoce PREST-APP la ruta que te ayudara con tus rutas de prestamos y cobros sin ningun proble
+Entra y conoce PREST-APP la ruta que te ayudara con tus rutas de prestamos y cobros sin ningun problema
 ![1](https://github.com/user-attachments/assets/3d18ee09-8077-4bcc-b2f9-03bc43ae94f5)
 ![2](https://github.com/user-attachments/assets/c272b7a4-df6a-4874-998e-96f13c33e471)
 ![3](https://github.com/user-attachments/assets/1829c20d-e8c9-4532-8bce-77e3c7cbc4fa)
