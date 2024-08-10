@@ -1,0 +1,12 @@
+Entra y conoce PREST-APP la ruta que te ayudara con tus rutas de prestamos y cobros sin ningun proble
+![1](https://github.com/user-attachments/assets/3d18ee09-8077-4bcc-b2f9-03bc43ae94f5)
+![2](https://github.com/user-attachments/assets/c272b7a4-df6a-4874-998e-96f13c33e471)
+![3](https://github.com/user-attachments/assets/1829c20d-e8c9-4532-8bce-77e3c7cbc4fa)
+![2](https://github.com/user-attachments/assets/384171fb-ad3c-47f0-b20c-2a4aa46302cf)
+![3](https://github.com/user-attachments/assets/337a971e-f5f2-43ea-b5c8-76c8bd27d556)
+![4](https://github.com/user-attachments/assets/92e20424-cc42-4235-bd2e-967a0aa70622)
+![5](https://github.com/user-attachments/assets/e557d831-6df0-43e1-9776-81ef1861f607)
+![6](https://github.com/user-attachments/assets/3ac99400-aa2b-4e36-a7c7-35cbeb47640c)
+![9](https://github.com/user-attachments/assets/6098d9e5-5254-4f71-adc0-5acf4ae72604)
+![8](https://github.com/user-attachments/assets/f21290c8-9e15-4b3c-bfca-adfcadb1fa57)
+![7](https://github.com/user-attachments/assets/7816c77d-c376-4494-ab6b-a8a3f588f3b2)
